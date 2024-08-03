@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #181818;
+      }
+      .title {
+        text-align: center;
+        font-size: 64px;
+        font-weight: bold;
+        color: #00c900;
+        margin-top: 20px;
+        margin-bottom: -20px;
+      }
+      .container-body {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin-top: -20px;
+      }
+      .container {
+        border-radius: 10px;
+        background-color: #cccccc;
+        width: 1200px;
+        height: 560px;
+        min-height: 560px;
+        min-width: 560px;
+        box-shadow: 5px 6px rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: hidden;
+      }
+      .container p {
+        color: #555555;
+      }
+      .container-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        background-color: #b1b1b1;
+        border-radius: 10px;
+      }
+      .container-header div {
+        display: flex;
+        align-items: center;
+      }
+      .dropdown1 {
+        border-radius: 10px;
+        width: 150px;
+        height: 40px;
+        margin-left: 10px;
+        padding: 5px;
+        background-color: #b1b1b1;
+        border: 2px solid #d8d8d8;
+        font-size: 16px;
+        color: #ffffff;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .dropdown1:hover {
+        display: block;
+        background-color: #bdbdbd;
+        color: #fff;
+        border-color: #fff;
+      }
+      .dropdown1:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.856);
+      }
+      .textarea-container {
+        display: flex;
+        flex: 1;
+        margin-top: 20px;
+        height: calc(100% - 80px);
+      }
+      textarea {
+        width: 50%;
+        height: 100%;
+        margin-right: 10px;
+        padding: 10px;
+        border: 2px solid #d8d8d8;
+        border-radius: 10px;
+        background-color: #e0e0e0;
+        resize: none;
+        overflow: auto;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 32px;
+        font-weight: normal;
+        color: #2e2e2e;
+        box-sizing: border-box;
+        scrollbar-width: thin;
+        scrollbar-color: #929292 #e0e0e0;
+      }
+      textarea::-webkit-scrollbar {
+        width: 8px;
+      }
+      textarea::-webkit-scrollbar-thumb {
+        background-color: #505050;
+        border-radius: 10px;
+      }
+      textarea::-webkit-scrollbar-track {
+        background-color: #e0e0e0;
+      }
+      .result {
+        width: 50%;
+        height: 100%;
+        padding: 10px;
+        border: 2px solid #d8d8d8;
+        border-radius: 10px;
+        background-color: #e0e0e0;
+        box-sizing: border-box;
+        color: #2e2e2e;
+        overflow: auto;
+        font-size: 32px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .translate {
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        background-color: #00c900;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .translate:hover {
+        background-color: #00a800;
+      }
+      .watermark {
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+        color: #fff;
+      }
+      .watermark a {
+        outline: none;
+        text-decoration: none;
+        color: #006ec9e3;
+        font-style: italic;
+        transition: ease-in-out 0.2s;
+      }
+      .watermark a:hover {
+        color: #b9b9b9;
+      }
+      p {
+        color: #fff;
+      }
+      button {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        border: 0;
+        vertical-align: middle;
+        text-decoration: none;
+        font-size: inherit;
+        font-family: inherit;
+      }
+      .learn-more {
+        margin-top: 10px;
+        font-weight: 600;
+        color: #263822;
+        text-transform: uppercase;
+        padding: 1.25em 2em;
+        background: #a2ff8f;
+        border: 2px solid #85b189;
+        border-radius: 0.75em;
+        transform-style: preserve-3d;
+        transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+          background 150ms cubic-bezier(0, 0, 0.58, 1);
+      }
+      .learn-more::before {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #c4f9c4;
+        border-radius: inherit;
+        box-shadow: 0 0 0 2px #8ab185, 0 0.625em 0 0 #e8ffe2;
+        transform: translate3d(0, 0.75em, -1em);
+        transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+          box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+      }
+      .learn-more:hover {
+        background: #ffffff;
+        transform: translate(0, 0.25em);
+      }
+      .learn-more:hover::before {
+        box-shadow: 0 0 0 2px #8cb185, 0 0.5em 0 0 #95ff8c;
+        transform: translate3d(0, 0.5em, -1em);
+      }
+      .learn-more:active {
+        background: #9aff7b;
+        transform: translate(0em, 0.75em);
+      }
+      .learn-more:active::before {
+        box-shadow: 0 0 0 2px #85b189, 0 0 #a0ff89;
+        transform: translate3d(0, 0, -1em);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="title">Translator</h1>
+    </div>
+    <div class="container-body">
+      <div class="container">
+        <div class="container-header">
+          <div>
+            <p>Select Your Language</p>
+            <select class="dropdown1" name="lang1" id="lang1"></select>
+          </div>
+          <div>
+            <p>Translation Language</p>
+            <select class="dropdown1" name="lang2" id="lang2"></select>
+          </div>
+        </div>
+        <div class="textarea-container">
+          <textarea
+            name="textbox"
+            id="textbox"
+            placeholder="Translate..."
+          ></textarea>
+          <div class="result" id="result"></div>
+        </div>
+        <button class="learn-more">Translate</button>
+      </div>
+      <p class="watermark">
+        Made by
+        <a target="_blank" href="https://github.com/seri4lize">seri4lize</a>
+      </p>
+      <p style="font-size: 24px">
+        Select your language to English for best experience
+      </p>
+    </div>
+    <script>
+      function setDropdowns() {
+        const lang1 = document.getElementById("lang1");
+        const lang2 = document.getElementById("lang2");
+
+        const languages = [
+          { value: "en", text: "English" },
+          { value: "tr", text: "Türkçe" },
+          { value: "fr", text: "Français" },
+          { value: "es", text: "Español" },
+          { value: "de", text: "Deutsch" },
+        ];
+
+        lang1.innerHTML = "";
+        languages.forEach((option) => {
+          const opt = document.createElement("option");
+          opt.value = option.value;
+          opt.textContent = option.text;
+          lang1.appendChild(opt);
+        });
+
+        updateDropdown2();
+
+        lang1.addEventListener("change", updateDropdown2);
+      }
+
+      function updateDropdown2() {
+        const selectedLang1 = document.getElementById("lang1").value;
+        const lang2 = document.getElementById("lang2");
+
+        lang2.innerHTML = "";
+
+        const lang1Options = Array.from(
+          document.getElementById("lang1").options
+        );
+        const availableLanguages = lang1Options.map((option) => ({
+          value: option.value,
+          text: option.text,
+        }));
+
+        availableLanguages.forEach((option) => {
+          if (option.value !== selectedLang1) {
+            const opt = document.createElement("option");
+            opt.value = option.value;
+            opt.textContent = option.text;
+            lang2.appendChild(opt);
+          }
+        });
+      }
+      setDropdowns();
+
+      document
+        .querySelector(".learn-more")
+        .addEventListener("click", async () => {
+          const lang1 = document.getElementById("lang1").value;
+          const lang2 = document.getElementById("lang2").value;
+          const query = encodeURIComponent(
+            document.getElementById("textbox").value
+          );
+          if (query.length <= 0) {
+            alert("You can't translate an empty text");
+            return;
+          }
+          const langPair = `${lang1}|${lang2}`;
+
+          try {
+            const res = await fetch(
+              `https://api.mymemory.translated.net/get?q=${query}&langpair=${langPair}`
+            );
+            const result = await res.json();
+            document.getElementById("result").innerText =
+              result.responseData.translatedText;
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
